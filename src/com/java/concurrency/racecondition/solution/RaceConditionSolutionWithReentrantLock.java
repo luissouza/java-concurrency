@@ -1,21 +1,34 @@
 package com.java.concurrency.racecondition.solution;
 
-class CounterWithSynchronized {
+import java.util.concurrent.locks.ReentrantLock;
+
+class CounterWithReentrantLock {
 
     private int value = 0;
+    private final ReentrantLock lock = new ReentrantLock();
 
-    public synchronized  void increment() {
-        value++;
+    public void increment() {
+        lock.lock();
+        try {
+            value++;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public int getValue() {
-        return value;
+        lock.lock();
+        try {
+            return value;
+        } finally {
+            lock.unlock();
+        }
     }
 }
 
-public class RaceConditionSolutionWithSynchronized {
+public class RaceConditionSolutionWithReentrantLock {
     public static void main(String[] args) throws InterruptedException {
-        CounterWithSynchronized counter = new CounterWithSynchronized();
+        CounterWithReentrantLock counter = new CounterWithReentrantLock();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {

@@ -55,7 +55,7 @@ Finally, the result is printed:
 
 ```java
 System.out.println("Expected value: 20000");
-System.out.println("Actual value: " + counter.getValue());
+System.out.println("Actual value: " + counter.getValue()); //13156
 ```
 
 ## The Problem
@@ -67,8 +67,7 @@ System.out.println("Actual value: " + counter.getValue());
 
 - If two threads execute these steps at the same time, one increment can overwrite the other, causing **lost updates**.
 
-- As a result, the final expected value as **less than 20000**.
-- And the real result may be **less than 20000**, depending on thread scheduling.
+- As a result, the final value may be **less than 20000**, depending on thread scheduling.
 
 ## Why It May Not Always Fail
 On fast processors (like Intel i9) or in some JVM executions, you might always see `20000`.  

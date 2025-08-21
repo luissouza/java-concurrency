@@ -1,21 +1,28 @@
 package com.java.concurrency.racecondition.solution;
 
-class CounterWithSynchronized {
+class CounterWithMutex {
 
     private int value = 0;
+    private final Object mutex = new Object();
 
-    public synchronized  void increment() {
-        value++;
+    public void increment() {
+        synchronized (mutex) {
+            value++;
+        }
     }
 
     public int getValue() {
-        return value;
+        synchronized (mutex) {
+            return value;
+        }
     }
 }
 
-public class RaceConditionSolutionWithSynchronized {
+public class RaceConditionSolutionWithMutex {
+
     public static void main(String[] args) throws InterruptedException {
-        CounterWithSynchronized counter = new CounterWithSynchronized();
+
+        CounterWithMutex counter = new CounterWithMutex();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {

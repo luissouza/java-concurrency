@@ -2,7 +2,7 @@ package com.java.concurrency.racecondition.solution;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-class CounterA {
+class CounterWithAtomic {
     private AtomicInteger value = new AtomicInteger(0);
 
     public void increment() {
@@ -16,9 +16,8 @@ class CounterA {
 
 public class RaceConditionSolutionWithAtomicInteger {
     public static void main(String[] args) throws InterruptedException {
-        CounterA counter = new CounterA();
+        CounterWithAtomic counter = new CounterWithAtomic();
 
-        // Create two threads incrementing the counter 10000 times each
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {
                 counter.increment();
@@ -33,7 +32,6 @@ public class RaceConditionSolutionWithAtomicInteger {
 
         t1.start();
         t2.start();
-
         t1.join();
         t2.join();
 
