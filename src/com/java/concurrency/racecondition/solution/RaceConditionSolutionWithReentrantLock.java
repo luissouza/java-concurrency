@@ -26,6 +26,7 @@ class CounterWithReentrantLock {
     }
 }
 
+
 public class RaceConditionSolutionWithReentrantLock {
     public static void main(String[] args) throws InterruptedException {
         CounterWithReentrantLock counter = new CounterWithReentrantLock();
