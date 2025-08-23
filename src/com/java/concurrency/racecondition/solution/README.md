@@ -1,4 +1,4 @@
-# Race Condition Example in Java
+# Race Condition Solution Example in Java
 
 ## Overview
 
