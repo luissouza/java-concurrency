@@ -13,3 +13,5 @@ You can follow the articles that explain in detail the problems and solutions di
 ### [2 - Avoiding Thread Starvation in Java with ReentrantLock ](https://souzaluis.com/avoiding-thread-starvation-in-java-with-reentrantlock)
 
 ### [3 - Understanding and Solving Deadlocks in Java ](https://souzaluis.com/understanding-and-solving-deadlocks-in-java)
+
+### [4 - Understanding Livelock in Java — and How to Fix It ](https://souzaluis.com/understanding-livelock-in-java-and-how-to-fix-it)
