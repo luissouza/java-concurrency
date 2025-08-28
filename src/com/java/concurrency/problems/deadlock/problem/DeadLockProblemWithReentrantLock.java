@@ -1,6 +1,6 @@
-package com.java.concurrency.deadlock.problem;
+package com.java.concurrency.problems.deadlock.problem;
 
-import com.java.concurrency.deadlock.Account;
+import com.java.concurrency.problems.deadlock.Account;
 
 class BankTransferWithReentrantLock {
     public static void transfer(Account from, Account to, int amount) {

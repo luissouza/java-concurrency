@@ -1,4 +1,4 @@
-package com.java.concurrency.starvation.problem;
+package com.java.concurrency.problems.starvation.problem;
 
 class TaskHandler {
 

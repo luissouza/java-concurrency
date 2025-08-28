@@ -1,28 +1,22 @@
-package com.java.concurrency.racecondition.solution;
+package com.java.concurrency.problems.racecondition.solution;
 
-class CounterWithMutex {
+import java.util.concurrent.atomic.AtomicInteger;
 
-    private int value = 0;
-    private final Object mutex = new Object();
+class CounterWithAtomic {
+    private AtomicInteger value = new AtomicInteger(0);
 
     public void increment() {
-        synchronized (mutex) {
-            value++;
-        }
+        value.incrementAndGet();
     }
 
     public int getValue() {
-        synchronized (mutex) {
-            return value;
-        }
+        return value.get();
     }
 }
 
-public class RaceConditionSolutionWithMutex {
-
+public class RaceConditionSolutionWithAtomicInteger {
     public static void main(String[] args) throws InterruptedException {
-
-        CounterWithMutex counter = new CounterWithMutex();
+        CounterWithAtomic counter = new CounterWithAtomic();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {

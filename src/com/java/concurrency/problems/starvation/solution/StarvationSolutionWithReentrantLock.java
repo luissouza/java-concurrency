@@ -1,4 +1,4 @@
-package com.java.concurrency.starvation.solution;
+package com.java.concurrency.problems.starvation.solution;
 
 import java.util.concurrent.locks.ReentrantLock;
 

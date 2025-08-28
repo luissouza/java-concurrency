@@ -1,4 +1,4 @@
-package com.java.concurrency.livelock.problem;
+package com.java.concurrency.problems.livelock.problem;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

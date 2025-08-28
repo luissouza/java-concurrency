@@ -1,4 +1,4 @@
-package com.java.concurrency.livelock.solution;
+package com.java.concurrency.problems.livelock.solution;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;

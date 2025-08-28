@@ -1,21 +1,28 @@
-package com.java.concurrency.racecondition.problem;
+package com.java.concurrency.problems.racecondition.solution;
 
-class Counter {
+class CounterWithMutex {
 
     private int value = 0;
+    private final Object mutex = new Object();
 
     public void increment() {
-        value++;
+        synchronized (mutex) {
+            value++;
+        }
     }
 
     public int getValue() {
-        return value;
+        synchronized (mutex) {
+            return value;
+        }
     }
 }
 
-public class RaceConditionProblem {
+public class RaceConditionSolutionWithMutex {
+
     public static void main(String[] args) throws InterruptedException {
-        Counter counter = new Counter();
+
+        CounterWithMutex counter = new CounterWithMutex();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {
@@ -31,7 +38,6 @@ public class RaceConditionProblem {
 
         t1.start();
         t2.start();
-
         t1.join();
         t2.join();
 

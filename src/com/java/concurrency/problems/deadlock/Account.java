@@ -1,4 +1,4 @@
-package com.java.concurrency.deadlock;
+package com.java.concurrency.problems.deadlock;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

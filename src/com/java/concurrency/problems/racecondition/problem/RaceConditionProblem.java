@@ -1,10 +1,10 @@
-package com.java.concurrency.racecondition.solution;
+package com.java.concurrency.problems.racecondition.problem;
 
-class CounterWithSynchronized {
+class Counter {
 
     private int value = 0;
 
-    public synchronized  void increment() {
+    public void increment() {
         value++;
     }
 
@@ -13,9 +13,9 @@ class CounterWithSynchronized {
     }
 }
 
-public class RaceConditionSolutionWithSynchronized {
+public class RaceConditionProblem {
     public static void main(String[] args) throws InterruptedException {
-        CounterWithSynchronized counter = new CounterWithSynchronized();
+        Counter counter = new Counter();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {
@@ -31,6 +31,7 @@ public class RaceConditionSolutionWithSynchronized {
 
         t1.start();
         t2.start();
+
         t1.join();
         t2.join();
 

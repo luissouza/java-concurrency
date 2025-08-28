@@ -1,7 +1,7 @@
 
-package com.java.concurrency.deadlock.solution;
+package com.java.concurrency.problems.deadlock.solution;
 
-import com.java.concurrency.deadlock.Account;
+import com.java.concurrency.problems.deadlock.Account;
 
 class BankTransferWithSynchronizedSolution {
     public static void transfer(Account from, Account to, int amount) {

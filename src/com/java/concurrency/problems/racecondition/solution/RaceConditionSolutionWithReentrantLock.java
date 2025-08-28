@@ -1,22 +1,35 @@
-package com.java.concurrency.racecondition.solution;
+package com.java.concurrency.problems.racecondition.solution;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
-class CounterWithAtomic {
-    private AtomicInteger value = new AtomicInteger(0);
+class CounterWithReentrantLock {
+
+    private int value = 0;
+    private final ReentrantLock lock = new ReentrantLock();
 
     public void increment() {
-        value.incrementAndGet();
+        lock.lock();
+        try {
+            value++;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public int getValue() {
-        return value.get();
+        lock.lock();
+        try {
+            return value;
+        } finally {
+            lock.unlock();
+        }
     }
 }
 
-public class RaceConditionSolutionWithAtomicInteger {
+
+public class RaceConditionSolutionWithReentrantLock {
     public static void main(String[] args) throws InterruptedException {
-        CounterWithAtomic counter = new CounterWithAtomic();
+        CounterWithReentrantLock counter = new CounterWithReentrantLock();
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 10000; i++) {
