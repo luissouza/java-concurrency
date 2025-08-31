@@ -1,4 +1,4 @@
-package com.java.concurrency.introduction;
+package com.java.concurrency.introduction.threads;
 
 
 public class CreatingSimpleThreads {
