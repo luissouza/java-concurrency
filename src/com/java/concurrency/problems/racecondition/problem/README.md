@@ -5,10 +5,10 @@ This code demonstrates a simple **race condition** in Java.
 A race condition occurs when multiple threads access and modify a shared resource concurrently without proper synchronization, leading to unpredictable results.
 
 ## Code Explanation
-The program defines a `CounterB` class with a `value` field and an `increment()` method:
+The program defines a `Counter` class with a `value` field and an `increment()` method:
 
 ```java
-class CounterB {
+class Counter {
     private int value = 0;
 
     public void increment() {

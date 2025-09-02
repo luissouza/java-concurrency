@@ -1,4 +1,4 @@
-# Java - Concurrency and Parallelism
+# Java Multithreading - Concurrency & Parallelism
 
 ## About 
 
