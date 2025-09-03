@@ -12,7 +12,7 @@ You can follow the articles that explain in detail the problems and solutions di
 
 ### [2 - Java Multithreading - Runnable vs Thread ](https://souzaluis.com/java-multithreading-runnable-vs-thread)
 
-### [3 - Java Multithreading: Synchronized ](https://souzaluis.com/java-multithreading-synchronized)
+### [3 - Java Multithreading - Synchronized ](https://souzaluis.com/java-multithreading-synchronized)
 
 ### [4 - Java Multithreading - Race Condition](https://souzaluis.com/java-multithreading-racecondition)
 
