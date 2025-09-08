@@ -1,109 +1,155 @@
-# Java Multithreading: With and Without synchronized
+# Java Multithreading - Volatile
 
-This code demonstrates the difference between using synchronized and not using it when multiple threads share the same resource.
+This guide explains the execution flow of a Java program demonstrating a common concurrency issue and how the `volatile` keyword resolves it.
 
-## It contains two Java programs:
+---
 
-## SimpleThreadWithSynchronized.java → Using the synchronized keyword.
+## 1. Creating Threads
 
-``` java
-public class SimpleThreadWithSynchronized {
+The first step is to create three threads:
 
-   private static int counter = 0;
-
-   public static void main(String[] args) {
-       SimpleThreadWithSynchronized.Task task = new SimpleThreadWithSynchronized.Task();
-       for (int i = 0; i < 5; i++) {
-           Thread thread = new Thread(task, "Thread-" + i);
-           thread.start();
-       }
-   }
-
-   static class Task implements Runnable {
-       @Override
-       public synchronized void run() {
-            int value = ++counter;
-            String name = Thread.currentThread().getName();
-            System.out.printf("Running %s => counter: %d%n", name, value);
-      }
-   }
-}
-
+```java
+Thread t0 = new Thread(new Worker());
+Thread t1 = new Thread(new Worker());
+Thread t2 = new Thread(new Worker());
 ```
-Here, the method run() is marked as synchronized. This means:
 
-Only one thread at a time can execute the run() method on the same Task instance.
-It prevents two threads from incrementing the counter at the same time.
-The output is consistent and predictable.
+---
 
-## The output may look consistent:
+## 2. Starting Threads
 
-``` java
-Running Thread-0 => counter: 1
-Running Thread-4 => counter: 2
-Running Thread-3 => counter: 3
-Running Thread-2 => counter: 4
-Running Thread-1 => counter: 5
-``` 
+Next, the threads are started:
 
-## SimpleThreadWithOutSynchronized.java → Does not use synchronized.
+```java
+t0.start();
+t1.start();
+t2.start();
+```
 
-``` java
-public class SimpleThreadWithOutSynchronized {
+---
 
-    private static int counter = 0;
+## 3. Setting Shared Variables
 
-    public static void main(String[] args) {
-        Task task = new Task();
-        for (int i = 0; i < 5; i++) {
-            Thread thread = new Thread(task, "Thread-" + i);
-            thread.start();
-        }
-    }
+We then assign values to the shared variables `value` and `ready`:
 
-    static class Task implements Runnable {
-        @Override
-        public void run() {
-            int value = ++counter; 
-            String name = Thread.currentThread().getName();
-            System.out.printf("Running %s => counter: %d%n", name, value);
-        }
-    }
+```java
+value = 1000;
+ready = true;
+```
+
+---
+
+## 4. Waiting for Threads to Finish
+
+The following code ensures the application does not proceed until threads `t0`, `t1`, and `t2` have actually finished execution:
+
+```java
+while (t0.getState() != Thread.State.TERMINATED
+       || t1.getState() != Thread.State.TERMINATED
+       || t2.getState() != Thread.State.TERMINATED) {
+    // busy wait
 }
 ```
 
-Here, run() is not synchronized. This means:
+---
 
-Multiple threads may try to increment the counter at the same time.
-The ++counter operation is not atomic (it involves reading, adding, then writing).
-As a result, two threads may read the same value before one writes it back → leading to duplicate values or skipped numbers.
+## 5. Resetting Shared Variables
 
-## The output may look inconsistent:
+After the threads finish, the shared variables are reset:
 
-``` java
-Running Thread-0 => counter: 1
-Running Thread-1 => counter: 2
-Running Thread-2 => counter: 2  <-- Duplicate value!
-Running Thread-3 => counter: 2  <-- Duplicate value!
-Running Thread-4 => counter: 5
-``` 
+```java
+value = 0;
+ready = false;
+```
 
-## Why is synchronized important here?
+---
 
-## Without synchronized:
+## How It Works
 
-Race conditions can occur.
-The counter may become corrupted or inconsistent.
-The final result depends on the CPU scheduling (which thread runs first), so it changes every time you run the program.
+When we call `start()`, the OS is instructed to execute the `run()` method of each thread:
 
-## With synchronized:
+```java
+private static class Worker implements Runnable {
+    @Override
+    public void run() {
+        while (!ready) {
+            Thread.yield();
+        }
 
-Only one thread can execute run() at a time.
-The increment (++counter) is protected.
-The output is ordered and reliable, for example:
+        if (value != 1000) {
+            throw new IllegalStateException("Inconsistent value detected!");
+        }
+    }
+}
+```
+
+* The **execution order** of `t0`, `t1`, and `t2` is determined by the **operating system**, not Java.
+* Inside `Worker`, the thread loops until `ready` becomes `true`.
+* `Thread.yield()` is a hint to the processor:
+
+  > "I have no work to do right now, you may let another thread run."
+* Once `ready` is `true`, the check `if (value != 1000)` executes.
+
+---
+
+## Can the Exception Actually Happen?
+
+Logically, one might think this exception should never be thrown because:
+
+```java
+value = 1000;
+ready = true;
+```
+
+Since `value` is set before `ready`, any thread seeing `ready == true` should also see `value == 1000`.
+
+However, in practice, exceptions can occur:
+
+```
+Exception in thread "Thread-60595" java.lang.IllegalStateException: Inconsistent value detected!
+    at com.java.concurrency.introduction.volatilekeyword.VolatileProblem$Worker.run(VolatileProblem.java:16)
+...
+```
+
+---
+
+## The Problem
+
+The root cause lies in **CPU caching**:
+
+* When a thread writes to a variable, it may update a CPU cache rather than main memory immediately.
+* Another thread may read the variable from its own cache and see a stale value.
+
+Example:
+
+* Thread A updates `int variable = 1`.
+* Thread B reads the variable but sees `0` because it reads from its CPU cache instead of main memory.
+
+---
+
+## The Solution: `volatile`
+
+Using `volatile` ensures all reads and writes occur directly in **main memory**, bypassing the CPU cache:
+
+```java
+private static volatile int value = 0;
+private static volatile boolean ready = false;
+```
+
+This guarantees visibility of changes across threads.
+
+---
+
+## Trade-offs of `volatile`
+
+* **Performance cost:** Accessing main memory is slightly slower than reading from CPU cache.
+* **Selective use:** Not all variables should be `volatile`; overusing it would negate CPU cache benefits and reduce overall performance.
+
+---
 
 ## Conclusion
 
-This simple example shows why synchronization is essential in multithreaded programs.
-Without it, shared variables can become inconsistent due to race conditions.
-With it, execution is controlled and safe.
+This example demonstrates a fundamental concurrency issue in Java: **visibility of shared variables across threads**.
+
+* Without `volatile`, threads may see stale values.
+* With `volatile`, memory visibility is guaranteed, preventing subtle and difficult-to-detect bugs.
