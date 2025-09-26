@@ -1,9 +1,13 @@
 package com.java.concurrency.problems.datarace.problem;
 
+import java.util.LinkedList;
+
 public class DataRaceProblem {
     private static int counter = 0;
 
     public static void main(String[] args) {
+
+        LinkedList
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
@@ -28,5 +32,18 @@ public class DataRaceProblem {
         }
 
         System.out.println("Final counter value: " + counter);
+    }
+
+
+
+    public void sum(int a, int b) {
+
+        for(int i =0; i < a; i++) {
+            System.out.println(i);
+        }
+
+        for(int i =0; i < a; i++) {
+            System.out.println(i);
+        }
     }
 }
