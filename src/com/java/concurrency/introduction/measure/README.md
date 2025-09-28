@@ -12,5 +12,5 @@ java.lang.OutOfMemoryError: unable to create native thread: possibly out of
 memory or process/resource limits reached
 at java.base/java.lang.Thread.start0(Native Method)
 at java.base/java.lang.Thread.start(Thread.java:1526)
-at com.java.concurrency.measure.ThreadLimitMeasureTest.main(ThreadLimitMeasureTest.java:16)
+at com.java.concurrency.introduction.measure.ThreadLimitMeasureTest.main(ThreadLimitMeasureTest.java:16)
 ```

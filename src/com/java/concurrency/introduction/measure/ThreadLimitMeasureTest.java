@@ -1,4 +1,4 @@
-package com.java.concurrency.measure;
+package com.java.concurrency.introduction.measure;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.LockSupport;

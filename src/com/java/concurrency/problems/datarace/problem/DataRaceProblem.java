@@ -1,13 +1,9 @@
 package com.java.concurrency.problems.datarace.problem;
 
-import java.util.LinkedList;
-
 public class DataRaceProblem {
     private static int counter = 0;
 
     public static void main(String[] args) {
-
-        LinkedList
 
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
